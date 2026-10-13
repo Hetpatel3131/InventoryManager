@@ -188,9 +188,29 @@ def remove_item(inventory):
     print(f"Item removed: {removed_item['name']}")
 
 def search_inventory(inventory):
-    """Search for inventory items by name or category."""
-    pass
+    """
+    Search for inventory items by name using case-insensitive partial matching.
+    Rejects empty or whitespace-only search queries.
+    """
+    query = input("Enter search term: ").strip()
 
+    # Reject whitespace or empty searches per rubric requirement
+    if not query:
+        print("Search term cannot be empty.")
+        return
+
+    matches = []
+    for item in inventory:
+        if query.lower() in item["name"].lower():
+            matches.append(item)
+
+    if not matches:
+        print("No inventory items matched your search.")
+        return
+
+    print("Search Results:")
+    for number, item in enumerate(matches, 1):
+        print(f"{number}. {item['name']} | {item['category']} | Quantity: {item['quantity']}")
 
 def display_summary(inventory):
     """Show inventory totals and items that are running low."""
