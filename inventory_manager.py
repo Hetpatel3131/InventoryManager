@@ -68,13 +68,54 @@ def save_inventory(inventory, filename):
 
 
 def view_inventory(inventory):
-    """Display all items and their quantities."""
-    pass
+    """Display all inventory items in a numbered list."""
+    if not inventory:
+        print("No inventory items found.")
+        return
+
+    print("Inventory:")
+    for number, item in enumerate(inventory, 1):
+        print(f"{number}. {item['name']} | {item['category']} | Quantity: {item['quantity']}")
 
 
 def add_item(inventory):
-    """Ask for a new item's details and add it to the inventory."""
-    pass
+    """Validate a new item, add it to the inventory, and save it."""
+    name = input("Enter the item name: ").strip()
+    if not name:
+        print("Item name cannot be empty.")
+        return
+
+    if "|" in name:
+        print("Item name cannot contain the pipe character '|'.")
+        return
+
+    category = input("Enter the category: ").strip()
+    if not category:
+        print("Category cannot be empty.")
+        return
+
+    if "|" in category:
+        print("Category cannot contain the pipe character '|'.")
+        return
+
+    quantity = input("Enter the quantity: ").strip()
+    if not quantity.isdigit():
+        print("Quantity must be a nonnegative whole number.")
+        return
+
+    for item in inventory:
+        if item["name"].lower() == name.lower():
+            print("An item with that name already exists.")
+            return
+
+    inventory.append({
+        "name": name,
+        "category": category,
+        "quantity": int(quantity)
+    })
+
+    save_inventory(inventory, INVENTORY_FILE)
+    print("Item added successfully.")
 
 
 def update_quantity(inventory):
