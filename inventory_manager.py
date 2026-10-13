@@ -119,14 +119,73 @@ def add_item(inventory):
 
 
 def update_quantity(inventory):
-    """Find an item and change its quantity."""
-    pass
+    """Update an item's quantity and save the inventory."""
+    if not inventory:
+        print("No inventory items found.")
+        return
+
+    view_inventory(inventory)
+
+    selection = input("Enter the item number to update: ").strip()
+    if not selection.isdigit():
+        print("Please enter a valid item number.")
+        return
+
+    try:
+        index = int(selection) - 1
+    except ValueError:
+        print("Please enter a valid item number.")
+        return
+
+    if not (0 <= index < len(inventory)):
+        print("Item number is out of range.")
+        return
+
+    quantity = input("Enter the new quantity: ").strip()
+    if not quantity.isdigit():
+        print("Quantity must be a nonnegative whole number.")
+        return
+
+    try:
+        new_quantity = int(quantity)
+    except ValueError:
+        print("Quantity must be a nonnegative whole number.")
+        return
+
+    item = inventory[index]
+    item["quantity"] = new_quantity
+
+    save_inventory(inventory, INVENTORY_FILE)
+    print(f"{item['name']} quantity updated to {new_quantity}.")
 
 
 def remove_item(inventory):
-    """Find an item and remove it from the inventory."""
-    pass
+    """Remove a selected item and save the inventory."""
+    if not inventory:
+        print("No inventory items found.")
+        return
 
+    view_inventory(inventory)
+
+    selection = input("Enter the item number to remove: ").strip()
+    if not selection.isdigit():
+        print("Please enter a valid item number.")
+        return
+
+    try:
+        index = int(selection) - 1
+    except ValueError:
+        print("Please enter a valid item number.")
+        return
+
+    if not (0 <= index < len(inventory)):
+        print("Item number is out of range.")
+        return
+
+    removed_item = inventory.pop(index)
+
+    save_inventory(inventory, INVENTORY_FILE)
+    print(f"Item removed: {removed_item['name']}")
 
 def search_inventory(inventory):
     """Search for inventory items by name or category."""
