@@ -1,12 +1,12 @@
 """Manage supplies in a campus IT Help Desk hardware locker.
 
-Author: Student Name
-Course: Course Name
-Date: MM/DD/YYYY
+Author: Het Patel
+Course: CPS 310
+Date: 05/31/2006
+
+
 """
-
 import os
-
 
 INVENTORY_FILE = "inventory.txt"
 
@@ -117,7 +117,6 @@ def add_item(inventory):
     save_inventory(inventory, INVENTORY_FILE)
     print("Item added successfully.")
 
-
 def update_quantity(inventory):
     """Update an item's quantity and save the inventory."""
     if not inventory:
@@ -213,14 +212,59 @@ def search_inventory(inventory):
         print(f"{number}. {item['name']} | {item['category']} | Quantity: {item['quantity']}")
 
 def display_summary(inventory):
-    """Show inventory totals and items that are running low."""
-    pass
+    """Show inventory totals and items with fewer than five units."""
+    if not inventory:
+        print("No inventory items found.")
+        return
+
+    total_quantity = 0
+    low_stock_items = []
+
+    for item in inventory:
+        total_quantity += item["quantity"]
+
+        if item["quantity"] < 5:
+            low_stock_items.append(item)
+
+    print("\nInventory Summary")
+    print(f"Total item types: {len(inventory)}")
+    print(f"Total units: {total_quantity}")
+
+    print("\nLow-stock items (fewer than 5 units):")
+    if not low_stock_items:
+        print("No low-stock items.")
+    else:
+        for item in low_stock_items:
+            print(f"{item['name']} | Quantity: {item['quantity']}")
 
 
 def main():
-    """Load the inventory and report how many items were loaded."""
+    """Load inventory and handle menu choices until the user exits."""
     inventory = load_inventory(INVENTORY_FILE)
     print(f"Loaded {len(inventory)} items.")
+
+    while True:
+        display_menu()
+        choice = input("Enter your choice (1-7): ").strip()
+
+        if choice == "1":
+            view_inventory(inventory)
+        elif choice == "2":
+            add_item(inventory)
+        elif choice == "3":
+            update_quantity(inventory)
+        elif choice == "4":
+            remove_item(inventory)
+        elif choice == "5":
+            search_inventory(inventory)
+        elif choice == "6":
+            display_summary(inventory)
+        elif choice == "7":
+            save_inventory(inventory, INVENTORY_FILE)
+            print("Inventory saved. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please enter a number from 1 to 7.")
 
 
 if __name__ == "__main__":

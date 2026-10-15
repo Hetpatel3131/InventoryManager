@@ -6,3 +6,4 @@ SATA Cable|Repair Hardware|3
 Ethernet Cable|Networking|15
 USB Wi-Fi Adapter|Networking|6
 Precision Screwdriver Set|Tools|2
+Test Adapter[C|Adapters|8
