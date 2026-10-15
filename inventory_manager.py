@@ -212,31 +212,35 @@ def search_inventory(inventory):
         print(f"{number}. {item['name']} | {item['category']} | Quantity: {item['quantity']}")
 
 def display_summary(inventory):
-    """Show inventory totals and items with fewer than five units."""
-    if not inventory:
-        print("No inventory items found.")
-        return
-
+    """Show item totals, low-stock counts, and counts by category."""
     total_quantity = 0
-    low_stock_items = []
+    low_stock_count = 0
+    category_counts = {}
 
     for item in inventory:
         total_quantity += item["quantity"]
 
         if item["quantity"] < 5:
-            low_stock_items.append(item)
+            low_stock_count += 1
+
+        category = item["category"].lower()
+
+        if category in category_counts:
+            category_counts[category] += 1
+        else:
+            category_counts[category] = 1
 
     print("\nInventory Summary")
-    print(f"Total item types: {len(inventory)}")
-    print(f"Total units: {total_quantity}")
+    print(f"Unique items: {len(inventory)}")
+    print(f"Total quantity: {total_quantity}")
+    print(f"Low-stock items: {low_stock_count}")
 
-    print("\nLow-stock items (fewer than 5 units):")
-    if not low_stock_items:
-        print("No low-stock items.")
+    print("\nItems by category:")
+    if not category_counts:
+        print("No categories found.")
     else:
-        for item in low_stock_items:
-            print(f"{item['name']} | Quantity: {item['quantity']}")
-
+        for category in category_counts:
+            print(f"{category}: {category_counts[category]}")
 
 def main():
     """Load inventory and handle menu choices until the user exits."""
